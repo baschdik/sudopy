@@ -1,3 +1,7 @@
+"""Test cls Sudoku
+
+from sudopy.py"""
+
 import pytest
 
 from sudopy import Sudoku
