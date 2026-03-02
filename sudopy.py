@@ -19,6 +19,18 @@ class Sudoku:
         (from left to right) then next row.
         0 represents empty / unsolved position
         """
+        if not isinstance(input, str):
+            raise TypeError(
+                f"Input has type {type(input)} but should have type String."
+            )
+        input = input.strip()
+        if len(input) != 81:
+            raise ValueError(
+                f"Input String has {len(input)} Digits but should have 81."
+            )
+        if not input.isdecimal():
+            raise ValueError("Input String contains characters outside of 0123456789.")
+
         input_list = list(input)
         playfield = [[0 for _ in range(cls.COLS)] for _ in range(cls.ROWS)]
         for row in range(cls.ROWS):
@@ -42,7 +54,7 @@ class Sudoku:
 
 
 def sudopy():
-    sudoko = Sudoku.fromStr("123406789" * 9)
+    sudoko = Sudoku.fromStr("123404321" * 9)
     print(sudoko)
 
 
