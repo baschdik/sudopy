@@ -4,7 +4,7 @@ from sudopy.py"""
 
 import pytest
 
-from sudopy import Sudoku
+from sudoku import Sudoku
 
 sudoku_str_regular = [
     (
@@ -67,10 +67,10 @@ sudoku_str_regular = [
 
 
 @pytest.mark.parametrize("generatorStr, refPlayfield", sudoku_str_regular)
-def test_fromStr_regular(generatorStr, refPlayfield):
+def test_createPlayfield_regular(generatorStr, refPlayfield):
 
     sudoku = Sudoku.fromStr(generatorStr)
-    assert sudoku._playfield == refPlayfield
+    assert sudoku.getPlayfield() == refPlayfield
 
 
 sudoku_input_length = [
