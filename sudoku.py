@@ -24,9 +24,9 @@ class Sudoku:
                 f"Input has type {type(input)} but should have type String."
             )
         input = input.strip()
-        if len(input) != 81:
+        if len(input) != cls.ROWS * cls.COLS:
             raise ValueError(
-                f"Input String has {len(input)} Digits but should have 81."
+                f"Input string has {len(input)} digits but should have 81."
             )
         if not input.isdecimal():
             raise ValueError("Input String contains characters outside of 0123456789.")
@@ -54,3 +54,14 @@ class Sudoku:
 
     def getPlayfield(self) -> list[list[int]]:
         return self._playfield
+
+    def getField(self, numberOfField: int) -> list[int]:
+        if not 1 <= numberOfField <= 9:
+            raise ValueError("Field Number outside of 1...9.")
+        firstRow = (numberOfField - 1) // 3 * 3
+        firstCol = ((numberOfField - 1) * 3) % 9
+        fieldlist = list()
+        for row in range(firstRow, firstRow + 2 + 1):
+            for col in range(firstCol, firstCol + 2 + 1):
+                fieldlist.append(self._playfield[row][col])
+        return fieldlist
