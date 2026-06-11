@@ -8,6 +8,7 @@ def sudopy():
     )
     print(sudoko)
     print(check_solved(sudoko))
+    print(sudoko.getField(2))
 
 
 if __name__ == "__main__":

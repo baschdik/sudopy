@@ -6,6 +6,22 @@ import pytest
 
 from sudoku import Sudoku
 
+sudoku_regular = [
+    (
+        [
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+            [1, 2, 3, 4, 0, 6, 7, 8, 9],
+        ]
+    ),
+]
+
 sudoku_str_regular = [
     (
         "123406789" * 9,
@@ -119,3 +135,20 @@ def test_fromStr_wrongDigitInInput(generatorStr):
 
     with pytest.raises(ValueError):
         _ = Sudoku.fromStr(generatorStr)
+
+
+@pytest.mark.parametrize("refPlayfield", sudoku_regular)
+def test_getField_regular(refPlayfield):
+    # Tests only if the field, which comes out, contains 9 digits
+    sudoku = Sudoku(refPlayfield)
+    for i in range(1, 10):
+        assert len(sudoku.getField(i)) == 9
+
+
+@pytest.mark.parametrize("refPlayfield", sudoku_regular)
+def test_getField_wrongValue(refPlayfield):
+    sudoku = Sudoku(refPlayfield)
+    testValues = [-5, 0, 10, 15, 27]
+    for i in testValues:
+        with pytest.raises(ValueError):
+            sudoku.getField(i)
