@@ -1,4 +1,4 @@
-from checker import check_solved
+from simpleChecker import SimpleChecker
 from sudoku import Sudoku
 
 
@@ -7,7 +7,9 @@ def sudopy():
         "576324891328519476941678235835241967497863152162957384284795613653182749719436528"
     )
     print(sudoko)
-    print(check_solved(sudoko))
+
+    checker = SimpleChecker()
+    print(checker.isSolved(sudoko))
 
 
 if __name__ == "__main__":

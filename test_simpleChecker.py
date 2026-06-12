@@ -4,7 +4,7 @@ from checker.py"""
 
 import pytest
 
-import checker
+from simpleChecker import SimpleChecker
 from sudoku import Sudoku
 
 sudoku_not_solved = [
@@ -43,13 +43,15 @@ sudoku_solved = [
 @pytest.mark.parametrize("playfield", sudoku_solved)
 def test_check_solved_isSolved(playfield):
     sudoku = Sudoku(playfield)
-    assert checker.check_solved(sudoku)
+    checker = SimpleChecker()
+    assert checker.isSolved(sudoku)
 
 
 @pytest.mark.parametrize("playfield", sudoku_not_solved)
 def test_check_solved_isNotSolved(playfield):
     sudoku = Sudoku(playfield)
-    assert checker.check_solved(sudoku) is False
+    checker = SimpleChecker()
+    assert checker.isSolved(sudoku) is False
 
 
 digits_solved = [
@@ -61,7 +63,7 @@ digits_solved = [
 
 @pytest.mark.parametrize("digits", digits_solved)
 def test_check_solved_digits_isSolved(digits):
-    assert checker.check_solved_digits(digits)
+    assert SimpleChecker._check_solved_digits(digits)
 
 
 digits_notSolved = [
@@ -73,7 +75,7 @@ digits_notSolved = [
 
 @pytest.mark.parametrize("digits", digits_notSolved)
 def test_check_solved_digits_notSolved(digits):
-    assert checker.check_solved_digits(digits) is False
+    assert SimpleChecker._check_solved_digits(digits) is False
 
 
 sudoku_not_regular = [
@@ -112,13 +114,15 @@ sudoku_regular = [
 @pytest.mark.parametrize("playfield", sudoku_regular)
 def test_check_regular_isRegular(playfield):
     sudoku = Sudoku(playfield)
-    assert checker.check_regular(sudoku)
+    checker = SimpleChecker()
+    assert checker.isRegular(sudoku)
 
 
 @pytest.mark.parametrize("playfield", sudoku_not_regular)
 def test_check_regular_notRegular(playfield):
     sudoku = Sudoku(playfield)
-    assert checker.check_regular(sudoku) is False
+    checker = SimpleChecker()
+    assert checker.isRegular(sudoku) is False
 
 
 digits_regular = [
@@ -131,7 +135,7 @@ digits_regular = [
 
 @pytest.mark.parametrize("digits", digits_regular)
 def test_check_regular_digits_isRegular(digits):
-    assert checker.check_regular_digits(digits)
+    assert SimpleChecker._check_regular_digits(digits)
 
 
 digits_notRegular = [
@@ -143,4 +147,4 @@ digits_notRegular = [
 
 @pytest.mark.parametrize("digits", digits_notRegular)
 def test_check_regular_digits_notRegular(digits):
-    assert checker.check_regular_digits(digits) is False
+    assert SimpleChecker._check_regular_digits(digits) is False
