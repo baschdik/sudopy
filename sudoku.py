@@ -26,7 +26,7 @@ class Sudoku:
         input = input.strip()
         if len(input) != cls.ROWS * cls.COLS:
             raise ValueError(
-                f"Input string has {len(input)} digits but should have 81."
+                f"Input string has {len(input)} digits but should have {cls.ROWS * cls.COLS}."
             )
         if not input.isdecimal():
             raise ValueError("Input String contains characters outside of 0123456789.")
@@ -65,3 +65,8 @@ class Sudoku:
             for col in range(firstCol, firstCol + 2 + 1):
                 fieldlist.append(self._playfield[row][col])
         return fieldlist
+
+    def modify(self, row: int, col: int, number: int):
+        if not 0 < number < 9:
+            raise ValueError("Input Number outside 0...9")
+        self._playfield[row][col] = number
