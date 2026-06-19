@@ -1,0 +1,11 @@
+#playfield {
+    layout: grid;
+    grid-size: 9 10;
+    grid-columns: 5;
+    grid-rows: 2;
+}
+
+Input>.input--cursor {
+    background: black 100%;
+    color: white;
+}
