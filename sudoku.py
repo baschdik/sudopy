@@ -66,7 +66,10 @@ class Sudoku:
                 fieldlist.append(self._playfield[row][col])
         return fieldlist
 
+    def getCellValue(self, row: int, col: int) -> int:
+        return self._playfield[row][col]
+
     def modify(self, row: int, col: int, number: int):
-        if not 0 < number < 9:
+        if not 0 <= number <= 9:
             raise ValueError("Input Number outside 0...9")
         self._playfield[row][col] = number

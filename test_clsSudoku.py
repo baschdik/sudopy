@@ -167,6 +167,8 @@ def test_modify_error(refPlayfield):
     sudoku = Sudoku(refPlayfield)
     testValues = [-5, -1, 10, 15]
     for i in testValues:
-        print(i)
         with pytest.raises(ValueError):
             sudoku.modify(1, 2, i)
+
+
+# TODO: getCellValue
