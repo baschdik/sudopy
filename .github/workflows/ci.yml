@@ -1,0 +1,28 @@
+name: CI Pipeline (uv)
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install uv
+        run: pip install uv
+
+      - name: Sync dependencies with uv
+        run: uv sync --dev
+
+      - name: Lint with ruff
+        run: uv run ruff check .
+
+      - name: Type check with mypy
+        run: uv run mypy .
+
+      - name: Run tests with pytest
+        run: uv run pytest
