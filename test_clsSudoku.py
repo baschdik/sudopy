@@ -152,3 +152,23 @@ def test_getField_wrongValue(refPlayfield):
     for i in testValues:
         with pytest.raises(ValueError):
             sudoku.getField(i)
+
+
+@pytest.mark.parametrize("refPlayfield", sudoku_regular)
+def test_modify_correct(refPlayfield):
+    sudoku = Sudoku(refPlayfield)
+    for i in range(0, 10):
+        sudoku.modify(i % 9, i * 2 % 9, i)
+        assert sudoku._playfield[i % 9][i * 2 % 9] == i
+
+
+@pytest.mark.parametrize("refPlayfield", sudoku_regular)
+def test_modify_error(refPlayfield):
+    sudoku = Sudoku(refPlayfield)
+    testValues = [-5, -1, 10, 15]
+    for i in testValues:
+        with pytest.raises(ValueError):
+            sudoku.modify(1, 2, i)
+
+
+# TODO: getCellValue
