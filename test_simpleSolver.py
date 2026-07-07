@@ -6,7 +6,7 @@ from typing import Tuple
 
 import pytest
 
-from simpleChecker import SudokuChecker
+from simpleChecker import SimpleChecker, SudokuChecker
 from simpleSolver import SimpleSolver
 from sudoku import Sudoku
 
@@ -33,7 +33,7 @@ sudoku_test = [
             "001000800902408705080000040200103009010506080500209006070000030103804207004000100"
         ),
         Sudoku.fromStr(
-            "451697823983418765786352941268143579319576482547289316875921634193864257624735198"
+            "451697823932418765786352941268143579319576482547289316875921634193864257624735198"
         ),
     ),
     (
@@ -50,6 +50,22 @@ sudoku_test = [
         ),
         Sudoku.fromStr(
             "973148256618523479542976318354617982721894635896235147265481793487369521139752864"
+        ),
+    ),
+    (
+        Sudoku.fromStr(
+            "001709800003080700740050013020000060900305008030000070650090034004020600009601200"
+        ),
+        Sudoku.fromStr(
+            "561739842293184756748256913425978361917365428836412579652897134184523697379641285"
+        ),
+    ),
+    (
+        Sudoku.fromStr(
+            "009506200030070090500000007800050006040802050900010002400000009010040020006301400"
+        ),
+        Sudoku.fromStr(
+            "009506200030070090500000007800050006040802050900010002400000009010040020006301400"
         ),
     ),
 ]
@@ -76,7 +92,7 @@ def test_solve(sudoku_in: Sudoku, sudoku_solution: Sudoku):
 
 @pytest.mark.parametrize("sudoku_in, sudoku_solution", sudoku_test)
 def test_nextStep(sudoku_in: Sudoku, sudoku_solution: Sudoku):
-    solver = SimpleSolver(sudoku_in, CheckerMock_isRegular())
+    solver = SimpleSolver(sudoku_in, SimpleChecker())
 
     unsolved_cells = {
         (row, col): sudoku_solution.getCellValue(row, col)
