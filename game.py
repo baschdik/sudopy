@@ -22,9 +22,9 @@ class Game:
         Modifikation is only done if the updated Playfield is still regular
         """
         oldValue = self.sudoku.getCellValue(row, col)
-        self.sudoku.modify(row, col, newValue)
+        self.sudoku.modifyCell(row, col, newValue)
         if not self.checker.isRegular(self.sudoku):
-            self.sudoku.modify(row, col, oldValue)
+            self.sudoku.modifyCell(row, col, oldValue)
             return oldValue
         return newValue
 
