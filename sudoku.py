@@ -9,6 +9,7 @@ class Sudoku:
     _playfield: list[list[int]]
     ROWS = 9
     COLS = 9
+    FIELDS = 9
 
     @classmethod
     def fromStr(cls, input: str) -> Self:

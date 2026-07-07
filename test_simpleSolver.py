@@ -1,8 +1,8 @@
 """Test solver functionality
 
 from simpleSolver.py"""
-
-from typing import Tuple
+# TODO: build solver fixture
+# TODO: build sudoku fixture
 
 import pytest
 
@@ -87,7 +87,8 @@ def test_init_notRegular(sudoku_in: Sudoku, sudoku_solution: Sudoku):
 @pytest.mark.parametrize("sudoku_in, sudoku_solution", sudoku_test)
 def test_solve(sudoku_in: Sudoku, sudoku_solution: Sudoku):
     solver = SimpleSolver(sudoku_in, CheckerMock_isRegular())
-    assert solver.solve().getPlayfield() == sudoku_solution.getPlayfield()
+    solver.solve()
+    assert solver.getSudoku().getPlayfield() == sudoku_solution.getPlayfield()
 
 
 @pytest.mark.parametrize("sudoku_in, sudoku_solution", sudoku_test)
@@ -104,3 +105,8 @@ def test_nextStep(sudoku_in: Sudoku, sudoku_solution: Sudoku):
     for testval, row, col in solver.nextStep():
         assert unsolved_cells.pop((row, col)) == testval
     assert not unsolved_cells
+
+
+def test_getPossibleValues():
+    solver = SimpleSolver(Sudoku.fromStr("001709800003080700740050013020000060900305008030000070650090034004020600009601200"), CheckerMock_isRegular())
+    assert solver.getPossibleValues([5,3,1,0]) == set([2,4,6,7,8,9])
