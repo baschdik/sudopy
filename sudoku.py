@@ -53,6 +53,15 @@ class Sudoku:
 
         return output
 
+
+    def __repr__(self) -> str:
+        playfield_as_string = ""
+        for row in self._playfield:
+            for val in row:
+                playfield_as_string += str(val)
+
+        return f"Sudoku: {playfield_as_string}"
+
     def getPlayfield(self) -> list[list[int]]:
         return self._playfield
 
