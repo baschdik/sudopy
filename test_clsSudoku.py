@@ -158,7 +158,7 @@ def test_getField_wrongValue(refPlayfield):
 def test_modify_correct(refPlayfield):
     sudoku = Sudoku(refPlayfield)
     for i in range(0, 10):
-        sudoku.modify(i % 9, i * 2 % 9, i)
+        sudoku.modifyCell(i % 9, i * 2 % 9, i)
         assert sudoku._playfield[i % 9][i * 2 % 9] == i
 
 
@@ -168,7 +168,7 @@ def test_modify_error(refPlayfield):
     testValues = [-5, -1, 10, 15]
     for i in testValues:
         with pytest.raises(ValueError):
-            sudoku.modify(1, 2, i)
+            sudoku.modifyCell(1, 2, i)
 
 
 # TODO: getCellValue

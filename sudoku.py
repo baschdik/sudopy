@@ -9,6 +9,7 @@ class Sudoku:
     _playfield: list[list[int]]
     ROWS = 9
     COLS = 9
+    FIELDS = 9
 
     @classmethod
     def fromStr(cls, input: str) -> Self:
@@ -52,10 +53,31 @@ class Sudoku:
 
         return output
 
+
+    def __repr__(self) -> str:
+        playfield_as_string = ""
+        for row in self._playfield:
+            for val in row:
+                playfield_as_string += str(val)
+
+        return f"Sudoku: {playfield_as_string}"
+
     def getPlayfield(self) -> list[list[int]]:
         return self._playfield
 
-    def getField(self, numberOfField: int) -> list[int]:
+    def getField(
+        self, numberOfField: int = 0, row: int | None = None, col: int | None = None
+    ) -> list[int]:
+        # TODO: test additonal input vales
+        # TODO: Update FieldsNo from 1...9 to 0...8
+        if (row and col is None) or (row is None and col):
+            raise ValueError(
+                f"Input Arguments row and col both need to set or unset, but row is {row} and col is {col}."
+            )
+
+        if row is not None and col is not None:
+            numberOfField = self.getFieldnum(row, col)
+
         if not 1 <= numberOfField <= 9:
             raise ValueError("Field Number outside of 1...9.")
         firstRow = (numberOfField - 1) // 3 * 3
@@ -66,10 +88,22 @@ class Sudoku:
                 fieldlist.append(self._playfield[row][col])
         return fieldlist
 
+    @staticmethod
+    # TODO: Test
+    def getFieldnum(row, col) -> int:
+        return (row // 3) * 3 + (col // 3) % 3 + 1
+
     def getCellValue(self, row: int, col: int) -> int:
         return self._playfield[row][col]
 
-    def modify(self, row: int, col: int, number: int):
+    def getRow(self, row) -> list[int]:
+        return self._playfield[row]
+
+    def getCol(self, col) -> list[int]:
+        inverted = list(zip(*self._playfield))
+        return list(inverted[col])
+
+    def modifyCell(self, row: int, col: int, number: int):
         if not 0 <= number <= 9:
             raise ValueError("Input Number outside 0...9")
         self._playfield[row][col] = number
