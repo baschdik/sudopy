@@ -11,6 +11,29 @@ class Sudoku:
     COLS = 9
     FIELDS = 9
 
+    class Cell:
+        def __init__(self, row: int, col: int, value: int | None) -> None:
+            if not 0 <= row <= 8:
+                raise ValueError("Input row outside 0...8.")
+            if not 0 <= col <= 8:
+                raise ValueError("Input col outside 0...8.")
+            if value and not 0 <= value <= 9:
+                raise ValueError("Input value outside 0...9.")
+            self.row = row
+            self.col = col
+            self.value = value
+
+        def __hash__(self) -> int:
+            return hash((self.row, self.col))
+
+        def __lt__(self, other):
+            if self.row == other.row:
+                return self.col < other.col
+            return self.row < other.row
+
+        def __str__(self) -> str:
+            return f"({self.row}, {self.col}): {self.value}"
+
     @classmethod
     def fromStr(cls, input: str) -> Self:
         """Creates Sudoku instance from single input string
@@ -53,7 +76,6 @@ class Sudoku:
 
         return output
 
-
     def __repr__(self) -> str:
         playfield_as_string = ""
         for row in self._playfield:
@@ -66,17 +88,13 @@ class Sudoku:
         return self._playfield
 
     def getField(
-        self, numberOfField: int = 0, row: int | None = None, col: int | None = None
+        self, numberOfField: int = 0, cellInField: Cell | None = None
     ) -> list[int]:
         # TODO: test additonal input vales
         # TODO: Update FieldsNo from 1...9 to 0...8
-        if (row and col is None) or (row is None and col):
-            raise ValueError(
-                f"Input Arguments row and col both need to set or unset, but row is {row} and col is {col}."
-            )
 
-        if row is not None and col is not None:
-            numberOfField = self.getFieldnum(row, col)
+        if isinstance(cellInField, self.Cell):
+            numberOfField = self.getFieldnum(cellInField)
 
         if not 1 <= numberOfField <= 9:
             raise ValueError("Field Number outside of 1...9.")
@@ -90,11 +108,11 @@ class Sudoku:
 
     @staticmethod
     # TODO: Test
-    def getFieldnum(row, col) -> int:
-        return (row // 3) * 3 + (col // 3) % 3 + 1
+    def getFieldnum(cell: Cell) -> int:
+        return (cell.row // 3) * 3 + (cell.col // 3) % 3 + 1
 
-    def getCellValue(self, row: int, col: int) -> int:
-        return self._playfield[row][col]
+    def getCellValue(self, cell: Cell) -> int:
+        return self._playfield[cell.row][cell.col]
 
     def getRow(self, row) -> list[int]:
         return self._playfield[row]
@@ -103,7 +121,7 @@ class Sudoku:
         inverted = list(zip(*self._playfield))
         return list(inverted[col])
 
-    def modifyCell(self, row: int, col: int, number: int):
-        if not 0 <= number <= 9:
-            raise ValueError("Input Number outside 0...9")
-        self._playfield[row][col] = number
+    def modifyCell(self, cell: Cell):
+        if cell.value is None:
+            raise ValueError("Can't modifiy playfield with None value.")
+        self._playfield[cell.row][cell.col] = cell.value

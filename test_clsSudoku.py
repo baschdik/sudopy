@@ -2,9 +2,37 @@
 
 from sudopy.py"""
 
+from typing import Tuple
+
 import pytest
 
 from sudoku import Sudoku
+
+cell_valid_coordinates = [(0, 0), (7, 7), (8, 8), (0, 8), (5, 0)]
+cell_valid_values = [0, 1, 5, 8, 9, None]
+
+
+@pytest.mark.parametrize("value", cell_valid_values)
+@pytest.mark.parametrize("coordinate", cell_valid_coordinates)
+def test_Cell_init_reguar(coordinate: Tuple[int, int], value: int | None):
+
+    cell = Sudoku.Cell(*coordinate, value)
+    assert cell
+    assert cell.row == coordinate[0]
+    assert cell.col == coordinate[1]
+    assert cell.value == value
+
+
+def test_Cell_lt():
+
+    c1 = Sudoku.Cell(0, 5, 2)
+    c2 = Sudoku.Cell(6, 3, 9)
+    c3 = Sudoku.Cell(5, 2, None)
+    c4 = Sudoku.Cell(0, 0, 4)
+    cellList = sorted([c1, c2, c3, c4])
+
+    assert cellList == [c4, c1, c3, c2]
+
 
 sudoku_regular = [
     (
@@ -158,7 +186,7 @@ def test_getField_wrongValue(refPlayfield):
 def test_modify_correct(refPlayfield):
     sudoku = Sudoku(refPlayfield)
     for i in range(0, 10):
-        sudoku.modifyCell(i % 9, i * 2 % 9, i)
+        sudoku.modifyCell(Sudoku.Cell(i % 9, i * 2 % 9, i))
         assert sudoku._playfield[i % 9][i * 2 % 9] == i
 
 
@@ -168,7 +196,7 @@ def test_modify_error(refPlayfield):
     testValues = [-5, -1, 10, 15]
     for i in testValues:
         with pytest.raises(ValueError):
-            sudoku.modifyCell(1, 2, i)
+            sudoku.modifyCell(Sudoku.Cell(1, 2, i))
 
 
 # TODO: getCellValue

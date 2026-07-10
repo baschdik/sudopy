@@ -49,14 +49,10 @@ class SimpleSolver(SudokuSolver):
 
         return self.checker.isSolved(self.sudoku)
 
-    class CellSet:
+    class CellSet(Sudoku.Cell):
         def __init__(self, row: int, col: int, values: Set[int]) -> None:
-            self.row = row
-            self.col = col
+            super().__init__(row, col, None)
             self.values = values
-
-        def __hash__(self) -> int:
-            return hash((self.row, self.col))
 
         def __lt__(self, other):
             return len(self.values) < len(other.values)
@@ -77,9 +73,8 @@ class SimpleSolver(SudokuSolver):
         for value in next_Cell.values:
             # print("next try: ", next_Cell, value) # DEBUG
             possible_solution = deepcopy(sudoku)
-            possible_solution.modifyCell(
-                next_Cell.row, next_Cell.col, value
-            )  # TODO: Use Cell instance
+            next_Cell.value = value
+            possible_solution.modifyCell(next_Cell)
             possible_solution = self.solveBacktracking(possible_solution)
             if not possible_solution:
                 continue
@@ -112,17 +107,19 @@ class SimpleSolver(SudokuSolver):
     def getPossibleValuesForEmptyCells(self, sudoku: Sudoku) -> List[CellSet]:
         """Returns all currently empty (0) cells with all possible values"""
         return [
-            self.CellSet(row, col, self.getPossibleValuesForCell(sudoku, row, col))
+            self.getPossibleValuesForCell(sudoku, self.CellSet(row, col, set()))
             for row in range(Sudoku.ROWS)
             for col in range(Sudoku.COLS)
-            if sudoku.getCellValue(row, col) == 0
+            if sudoku.getCellValue(Sudoku.Cell(row, col, None)) == 0
         ]
 
-    def getPossibleValuesForCell(self, sudoku: Sudoku, row: int, col: int) -> Set[int]:
-        return (
-            self.getPossibleValues(sudoku.getRow(row))
-            & self.getPossibleValues(sudoku.getCol(col))
-            & self.getPossibleValues(sudoku.getField(row=row, col=col))
+    def getPossibleValuesForCell(self, sudoku: Sudoku, cell: CellSet) -> CellSet:
+        return self.CellSet(
+            cell.row,
+            cell.col,
+            self.getPossibleValues(sudoku.getRow(cell.row))
+            & self.getPossibleValues(sudoku.getCol(cell.col))
+            & self.getPossibleValues(sudoku.getField(cellInField=cell)),
         )
 
     @staticmethod
@@ -140,11 +137,8 @@ class SimpleSolver(SudokuSolver):
         modificationDone = False
         for cell in possibleCellValues:
             if len(cell.values) == 1:
-                sudoku.modifyCell(
-                    cell.row,
-                    cell.col,
-                    cell.values.pop(),
-                )
+                cell.value = cell.values.pop()
+                sudoku.modifyCell(cell)
                 modificationDone = True
 
         return modificationDone
@@ -163,7 +157,8 @@ class SimpleSolver(SudokuSolver):
             return False
 
         for cell in cell_list:
-            sudoku.modifyCell(cell.row, cell.col, cell.values.pop())
+            cell.value = cell.values.pop()
+            sudoku.modifyCell(cell)
         return True
 
     @staticmethod
@@ -200,7 +195,7 @@ class SimpleSolver(SudokuSolver):
                     case AreaType.COL:
                         return col
                     case AreaType.FIELD:
-                        return Sudoku.getFieldnum(row, col) - 1
+                        return Sudoku.getFieldnum(Sudoku.Cell(row, col, None)) - 1
 
             def updateFromCellValues(self, cell: SimpleSolver.CellSet) -> None:
                 self.counter[self.sig_coord(cell.row, cell.col)].update(cell.values)

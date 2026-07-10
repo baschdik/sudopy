@@ -14,17 +14,17 @@ class Game:
         self.checker = checker
 
     def getCellValue(self, row: int, col: int) -> int:
-        return self.sudoku.getCellValue(row, col)
+        return self.sudoku.getCellValue(Sudoku.Cell(row, col, None))
 
     def modifyCell(self, row: int, col: int, newValue: int) -> int:
         """Modifies one Cell of the Sudoku-Playfield
 
         Modifikation is only done if the updated Playfield is still regular
         """
-        oldValue = self.sudoku.getCellValue(row, col)
-        self.sudoku.modifyCell(row, col, newValue)
+        oldValue = self.sudoku.getCellValue(Sudoku.Cell(row, col, None))
+        self.sudoku.modifyCell(Sudoku.Cell(row, col, newValue))
         if not self.checker.isRegular(self.sudoku):
-            self.sudoku.modifyCell(row, col, oldValue)
+            self.sudoku.modifyCell(Sudoku.Cell(row, col, oldValue))
             return oldValue
         return newValue
 

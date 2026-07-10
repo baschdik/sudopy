@@ -1,22 +1,31 @@
 from game import Game
 from simpleChecker import SimpleChecker
+from simpleSolver import SimpleSolver
 from sudoku import Sudoku
 from tui_app import SudopyTerminalInterface
 
 
 def sudopy():
     sudoko = Sudoku.fromStr(
-        "001000800902408705080000040200103009010506080500209006070000030103804207004000100"
+        "009506200030070090500000007800050006040802050900010002400000009010040020006301400"  # Schwer von Evgeniia
+        #"060000030000976102109200050030000090200609005090010070050007900003865000070000040"
     )
-    print(sudoko)
+
+    print("Input:\n", sudoko)
 
     checker = SimpleChecker()
-    print(checker.isSolved(sudoko))
+    # print(checker.isSolved(sudoko))
 
-    game = Game(sudoko, checker)
+    solver = SimpleSolver(sudoko, checker)
 
-    app = SudopyTerminalInterface(game)
-    app.run()
+    print("Result is solved ",solver.solve())
+    print("Result:\n", solver.getSudoku())
+    print(solver.getSudoku().__repr__())
+
+    # game = Game(sudoko, checker)
+
+    # app = SudopyTerminalInterface(game)
+    # app.run()
 
 
 if __name__ == "__main__":
