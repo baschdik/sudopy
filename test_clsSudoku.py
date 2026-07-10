@@ -141,14 +141,14 @@ def test_fromStr_wrongDigitInInput(generatorStr):
 def test_getField_regular(refPlayfield):
     # Tests only if the field, which comes out, contains 9 digits
     sudoku = Sudoku(refPlayfield)
-    for i in range(1, 10):
+    for i in range(9):
         assert len(sudoku.getField(i)) == 9
 
 
 @pytest.mark.parametrize("refPlayfield", sudoku_regular)
 def test_getField_wrongValue(refPlayfield):
     sudoku = Sudoku(refPlayfield)
-    testValues = [-5, 0, 10, 15, 27]
+    testValues = [-5, -1, 9, 15, 27]
     for i in testValues:
         with pytest.raises(ValueError):
             sudoku.getField(i)

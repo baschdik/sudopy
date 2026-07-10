@@ -53,7 +53,6 @@ class Sudoku:
 
         return output
 
-
     def __repr__(self) -> str:
         playfield_as_string = ""
         for row in self._playfield:
@@ -69,7 +68,6 @@ class Sudoku:
         self, numberOfField: int = 0, row: int | None = None, col: int | None = None
     ) -> list[int]:
         # TODO: test additonal input vales
-        # TODO: Update FieldsNo from 1...9 to 0...8
         if (row and col is None) or (row is None and col):
             raise ValueError(
                 f"Input Arguments row and col both need to set or unset, but row is {row} and col is {col}."
@@ -78,10 +76,10 @@ class Sudoku:
         if row is not None and col is not None:
             numberOfField = self.getFieldnum(row, col)
 
-        if not 1 <= numberOfField <= 9:
-            raise ValueError("Field Number outside of 1...9.")
-        firstRow = (numberOfField - 1) // 3 * 3
-        firstCol = ((numberOfField - 1) * 3) % 9
+        if not 0 <= numberOfField <= 8:
+            raise ValueError("Field Number outside of 0...8.")
+        firstRow = (numberOfField) // 3 * 3
+        firstCol = ((numberOfField) * 3) % 9
         fieldlist = list()
         for row in range(firstRow, firstRow + 2 + 1):
             for col in range(firstCol, firstCol + 2 + 1):
@@ -91,7 +89,7 @@ class Sudoku:
     @staticmethod
     # TODO: Test
     def getFieldnum(row, col) -> int:
-        return (row // 3) * 3 + (col // 3) % 3 + 1
+        return (row // 3) * 3 + (col // 3) % 3
 
     def getCellValue(self, row: int, col: int) -> int:
         return self._playfield[row][col]

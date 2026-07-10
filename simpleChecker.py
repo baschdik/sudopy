@@ -23,7 +23,7 @@ class SimpleChecker(SudokuChecker):
         for col in zip(*sudoku.getPlayfield()):
             if not SimpleChecker._check_regular_digits(col):
                 return False
-        for i in range(1, 10):  # all 9 fields in Sudoko playfield
+        for i in range(9):  # all 9 fields in Sudoko playfield
             if not SimpleChecker._check_regular_digits(sudoku.getField(i)):
                 return False
         return True
@@ -42,7 +42,7 @@ class SimpleChecker(SudokuChecker):
         for col in zip(*sudoku.getPlayfield()):
             if not SimpleChecker._check_solved_digits(col):
                 return False
-        for i in range(1, 10):  # all 9 fields in Sudoko playfield
+        for i in range(9):  # all 9 fields in Sudoko playfield
             if not SimpleChecker._check_solved_digits(sudoku.getField(i)):
                 return False
         return True
