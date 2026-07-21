@@ -52,7 +52,8 @@ class Playfield(Container):
     def compose(self) -> ComposeResult:
         for row in range(9):
             for col in range(9):
-                yield Cell(str(self.sudoku.getCellValue(row, col)), row, col)
+                cellInfo = self.sudoku.getCell(row, col)
+                yield Cell(str(cellInfo[0]), row, col)
         yield Label("123", id="mylabel")  # DEBUG Messages
 
     def on_cell_cell_update(self, event: Cell.CellUpdate) -> None:
@@ -63,11 +64,11 @@ class Playfield(Container):
         label.update(f"{event.cellID}")
         # --- only for DEBUG ---------
 
-        actualValue = self.sudoku.modifyCell(
+        actualCell = self.sudoku.modifyCell(
             *self.fromCellID_getRowCol(event.cellID), int(event.newValue)
         )
         cell = self.query_one("#" + event.cellID, Cell)
-        cell.value = str(actualValue)
+        cell.value = str(actualCell[0])
 
     @staticmethod
     def fromCellID_getRowCol(cellID: str) -> Tuple[int, int]:
